@@ -66,7 +66,7 @@ if(isset($_POST['name'])){
             }
         }
 
-        header("Location: ../index.php?added=1");
+        header("Location: ../add_business.php?added=1");
         exit();
 
     } else {
