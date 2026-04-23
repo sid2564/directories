@@ -334,169 +334,118 @@ if(isset($_SESSION['user_id']) && isset($conn)){
   </div>
 </div>
 
-<script>
-  // Add Business modal
-  
 
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
 
-document.querySelectorAll(".open-business").forEach(function(btn){
-  btn.addEventListener("click", function(e){
-    e.preventDefault();
-
-    <?php if(!isset($_SESSION['user_id'])): ?>
-        // ❌ login nahi hai
-        document.getElementById("loginModal").style.display = "flex";
-        style.display = "block";
-        // ❌ login hai but verify nahi
-        document.getElementById("loginModal").style.display = "flex";
-
-    <?php else: ?>
-        // ✅ verified user
-        document.getElementById("businessModal").style.display = "block";
-    <?php endif; ?>
-
-    document.body.classList.add("modal-open");
-  });
-});
-// document.querySelectorAll(".open-business").forEach(function(btn){
-//   btn.addEventListener("click", function(e){
-//     e.preventDefault();
-
-//     // 🔥 Har case me login modal open hoga
-//     document.getElementById("loginModal").style.display = "flex";
-//     document.body.classList.add("modal-open");
-//   });
-// });
-<script>
-document.addEventListener("DOMContentLoaded", function(){
-
-    document.querySelectorAll(".open-business").forEach(btn=>{
-        btn.addEventListener("click", function(e){
-            e.preventDefault();
-
-            <?php if(!isset($_SESSION['user_id'])): ?>
-                document.getElementById("loginModal").style.display = "flex";
-            <?php else: ?>
-                document.getElementById("businessModal").style.display = "flex";
-            <?php endif; ?>
-
-        });
-    });
-
-});
-</script>
-<?php if(isset($_SESSION['open_business_modal'])): ?>
-
-document.addEventListener("DOMContentLoaded", function(){
-    document.getElementById("businessModal").style.display = "flex";
-    document.body.classList.add("modal-open");
-});
-
-<?php unset($_SESSION['open_business_modal']); ?>
-<?php endif; ?>
-
-
-  // Sign Up modal
-  document.querySelectorAll(".open-signup").forEach(function(btn){
-    btn.addEventListener("click", function(e){
+  // =========================
+  // OPEN BUSINESS MODAL
+  // =========================
+  document.querySelectorAll(".open-business").forEach(function (btn) {
+    btn.addEventListener("click", function (e) {
       e.preventDefault();
-      document.getElementById("signupModal").style.display = "flex";
-      document.body.classList.add("modal-open");
+
+      let isLoggedIn = <?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>;
+
+      if (!isLoggedIn) {
+        let loginModal = document.getElementById("loginModal");
+        if (loginModal) loginModal.style.display = "flex";
+        return;
+      }
+
+      let businessModal = document.getElementById("businessModal");
+      if (businessModal) businessModal.style.display = "flex";
     });
   });
 
-  // Close buttons
-  document.querySelectorAll(".close").forEach(function(btn){
-    btn.onclick = function(){
-      btn.closest(".modal").style.display = "none";
-      document.body.classList.remove("modal-open");
-    };
+  // =========================
+  // OPEN SIGNUP MODAL
+  // =========================
+  document.querySelectorAll(".open-signup").forEach(function (btn) {
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
+      let modal = document.getElementById("signupModal");
+      if (modal) modal.style.display = "flex";
+    });
   });
 
-  // Click outside to close
-  window.onclick = function(e){
-    if(e.target.classList.contains("modal")){
+  // =========================
+  // CLOSE MODALS
+  // =========================
+  document.querySelectorAll(".close").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      let modal = btn.closest(".modal");
+      if (modal) modal.style.display = "none";
+    });
+  });
+
+  // =========================
+  // CLICK OUTSIDE CLOSE
+  // =========================
+  document.addEventListener("click", function (e) {
+    if (e.target.classList.contains("modal")) {
       e.target.style.display = "none";
-      document.body.classList.remove("modal-open");
     }
-  };
+  });
 
-  // Switch to Login
-  document.querySelectorAll(".switch-login").forEach(function(btn){
-    btn.addEventListener("click", function(e){
+  // =========================
+  // SWITCH LOGIN / SIGNUP
+  // =========================
+  document.querySelectorAll(".switch-login").forEach(function (btn) {
+    btn.addEventListener("click", function (e) {
       e.preventDefault();
-      document.getElementById("signupModal").style.display = "none";
-      document.getElementById("loginModal").style.display = "flex";
+      document.getElementById("signupModal")?.style.setProperty("display", "none");
+      document.getElementById("loginModal")?.style.setProperty("display", "flex");
     });
   });
 
-  // Switch to Signup
-  document.querySelectorAll(".switch-signup").forEach(function(btn){
-    btn.addEventListener("click", function(e){
+  document.querySelectorAll(".switch-signup").forEach(function (btn) {
+    btn.addEventListener("click", function (e) {
       e.preventDefault();
-      document.getElementById("loginModal").style.display = "none";
-      document.getElementById("signupModal").style.display = "flex";
+      document.getElementById("loginModal")?.style.setProperty("display", "none");
+      document.getElementById("signupModal")?.style.setProperty("display", "flex");
     });
   });
 
-  // Dropdowns
-  document.querySelectorAll(".dropdown > a").forEach(function(item){
-    item.addEventListener("click", function(e){
+  // =========================
+  // DROPDOWN MENU
+  // =========================
+  document.querySelectorAll(".dropdown > a").forEach(function (item) {
+    item.addEventListener("click", function (e) {
       e.preventDefault();
-      this.parentElement.classList.toggle("active");
+      item.parentElement.classList.toggle("active");
     });
   });
 
-  // Hamburger
-  document.addEventListener("DOMContentLoaded", function(){
-    var toggle = document.getElementById("menuToggle");
-    var nav    = document.getElementById("navLinks");
-    if(toggle) toggle.addEventListener("click", function(){ nav.classList.toggle("active"); });
-  });
-</script>
+  // =========================
+  // HAMBURGER MENU
+  // =========================
+  let toggle = document.getElementById("menuToggle");
+  let nav = document.getElementById("navLinks");
 
-<!-- Subcategory filter -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-document.addEventListener("DOMContentLoaded", function(){
-  var category   = document.getElementById("category");
-  var subcategory = document.getElementById("subcategory");
-  if(!category || !subcategory) return;
-  var options = subcategory.querySelectorAll("option");
-
-  options.forEach(function(o){ if(o.value !== "") o.style.display = "none"; });
-
-  category.addEventListener("change", function(){
-    var sel = this.value;
-    subcategory.value = "";
-    options.forEach(function(o){
-      if(o.value === ""){ o.style.display = "block"; return; }
-      o.style.display = (o.getAttribute("data-category") === sel) ? "block" : "none";
+  if (toggle && nav) {
+    toggle.addEventListener("click", function () {
+      nav.classList.toggle("active");
     });
-  });
-});
-</script>
+  }
 
+  // =========================
+  // USER DROPDOWN
+  // =========================
+  let userBtn = document.getElementById("userBtn");
+  let userMenu = document.getElementById("userDropdown");
 
-
-<script>
-document.addEventListener("DOMContentLoaded", function(){
-
-    let btn = document.getElementById("userBtn");
-    let menu = document.getElementById("userDropdown");
-
-    if(btn){
-        btn.addEventListener("click", function(e){
-            e.stopPropagation();
-            menu.style.display = (menu.style.display === "block") ? "none" : "block";
-        });
-    }
-
-    window.addEventListener("click", function(){
-        if(menu){
-            menu.style.display = "none";
-        }
+  if (userBtn && userMenu) {
+    userBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      userMenu.style.display =
+        userMenu.style.display === "block" ? "none" : "block";
     });
+  }
+
+  document.addEventListener("click", function () {
+    if (userMenu) userMenu.style.display = "none";
+  });
 
 });
 </script>
