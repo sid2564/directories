@@ -362,21 +362,10 @@ document.addEventListener("DOMContentLoaded", function () {
 <?php if(isset($_SESSION['open_business_modal'])): ?>
 <script>
 document.addEventListener("DOMContentLoaded", function(){
-    document.getElementById("businessModal").style.display = "flex";
-});
-</script>
-<?php unset($_SESSION['open_business_modal']); ?>
-<?php endif; ?>
-<script>
-document.addEventListener("DOMContentLoaded", function(){
-    document.getElementById("businessModal").style.display = "flex";
-});
-</script>
-<?php unset($_SESSION['open_business_modal']); ?>
-<?php endif; ?>
-<script>
-document.addEventListener("DOMContentLoaded", function(){
-    document.getElementById("businessModal").style.display = "flex";
+    var modal = document.getElementById("businessModal");
+    if(modal){
+        modal.style.display = "flex";
+    }
 });
 </script>
 <?php unset($_SESSION['open_business_modal']); ?>
