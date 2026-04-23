@@ -217,17 +217,28 @@ body{
        <?php
 $img = $row['image'];
 
-$imgPath = "uploads/" . $img;
-$serverPath = __DIR__ . "/uploads/" . $img;
+// 1. Check if the image name exists in database
+if (!empty($img)) {
+    // 2. Define the path relative to this file for the <img> tag
+    $imgPath = "uploads/" . $img; 
+    
+    // 3. Define the absolute path for the server to check if file exists
+    $serverPath = __DIR__ . DIRECTORY_SEPARATOR . "uploads" . DIRECTORY_SEPARATOR . $img;
 
-if(!empty($img) && file_exists($serverPath)){
-    $finalImg = $imgPath;
+    // 4. Verify if file actually exists on disk
+    if (file_exists($serverPath)) {
+        $finalImg = $imgPath;
+    } else {
+        // Fallback if database has a name but file is missing from folder
+        $finalImg = "uploads/default.png"; 
+    }
 } else {
+    // Fallback if database field is empty
     $finalImg = "uploads/default.png";
 }
 ?>
 
-<img src="<?php echo $finalImg; ?>">
+<img src="<?php echo $finalImg; ?>" alt="Business Logo">
 
         <div class="info">
             <h3><?php echo $row['name']; ?></h3>
