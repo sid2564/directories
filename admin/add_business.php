@@ -1,6 +1,9 @@
 <?php
 session_start();
-include "../directories/db.php";
+include __DIR__ . "/../db.php";
+if(!isset($conn)){
+    die("Database connection failed");
+}
 /* =========================
    LOGIN CHECK (SAFE REDIRECT)
 ========================= */
