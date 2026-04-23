@@ -1,9 +1,11 @@
 <?php
-require_once "db.php";
+include "../db.php";
+session_start();
 
-$id = $_GET['id'];
+$id = $_GET['id'] ?? 0;
 
-$conn->query("UPDATE businesses SET status='approved' WHERE id='$id'");
+mysqli_query($conn, "UPDATE businesses SET status='approved' WHERE id='$id'");
 
-header("Location: dashboard.php");
+header("Location: business.php");
+exit;
 ?>
