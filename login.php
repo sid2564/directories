@@ -50,13 +50,16 @@ if(isset($_POST['login'])){
 
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_name'] = $user['fullname'];
-        $_SESSION['email'] = $user['email'];
+
+        // 🔥 ONLY AFTER SUCCESS LOGIN
+        $_SESSION['login_verified'] = true;
+        $_SESSION['open_business_modal'] = true;
 
         header("Location: index.php");
         exit();
 
     } else {
-        $error = "Invalid Email or Password";
+        $error = "Invalid login details";
     }
 }
 ?>
