@@ -25,6 +25,15 @@ if(isset($_SESSION['user_id']) && isset($conn)){
   <title>Business Directory</title>
   <link rel="stylesheet" href="style1.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZPB6M0HBV8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-ZPB6M0HBV8');
+</script>
 </head>
 <body>
 
