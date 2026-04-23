@@ -1,10 +1,10 @@
 <?php
 $conn = mysqli_connect(
-    "MYSQLHOST_YAHAN",
-    "MYSQLUSER_YAHAN",
-    "MYSQLPASSWORD_YAHAN",
-    "MYSQLDATABASE_YAHAN",
-    3306
+    "shortline.proxy.rlwy.net",  // HOST
+    "root",                      // USER
+    "HWhvCcoQPRkjWAPmlBGfFneILSGCTJSh", // PASSWORD
+    "railway",                  // DATABASE
+    17085                       // PORT (IMPORTANT)
 );
 
 if(!$conn){
