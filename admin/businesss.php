@@ -93,7 +93,7 @@ td:last-child, th:last-child{
 </tr>
 
 <?php
-$result = $conn->query("SELECT * FROM businesses ORDER BY id DESC");
+$result = $conn->query("SELECT id,name,owner_name,phone,category,status FROM businesses");
 
 if($result && $result->num_rows > 0){
     while($row = $result->fetch_assoc()){
@@ -116,7 +116,7 @@ if($result && $result->num_rows > 0){
 
     <td>
         <?php if($row['status']!='approved'){ ?>
-            <a href="approve.php?id=<?= $row['id']; ?>" class="btn approve">Approve</a>
+            <a href="approve_business.php?id=<?= $row['id']; ?>" class="btn approve">Approve</a>
         <?php } ?>
 
         <a href="delete_business.php?id=<?= $row['id']; ?>" 
