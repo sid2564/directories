@@ -6,7 +6,6 @@ if(!$conn){
     die("DB NOT CONNECTED");
 }
 
-echo "DB CONNECTED"; // TEMP ONLY
 
 /* FIRST SET */
 $reviews = mysqli_query($conn, "
