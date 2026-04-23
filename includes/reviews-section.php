@@ -138,5 +138,11 @@ $reviews2 = mysqli_query($conn, "
 
   </div>
 </div>
-
+<?php
+if(!$conn){
+    die("DB NOT CONNECTED");
+} else {
+    echo "CONNECTED SUCCESSFULLY";
+}
+?>
 </section>
