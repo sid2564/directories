@@ -8,15 +8,15 @@ if(!isset($_SESSION['user_id'])){
 
 $user_id = $_SESSION['user_id'];
 
-// Variable values ko 'escape' karna zaroori hai taaki apostrophe (') se error na aaye
-$id = mysqli_real_escape_string($conn, $_POST['id']);
-$name = mysqli_real_escape_string($conn, $_POST['name']);
-$phone = mysqli_real_escape_string($conn, $_POST['phone']);
-$city = mysqli_real_escape_string($conn, $_POST['city']);
+/* SAFE INPUT */
+$id          = mysqli_real_escape_string($conn, $_POST['id']);
+$name        = mysqli_real_escape_string($conn, $_POST['name']);
+$phone       = mysqli_real_escape_string($conn, $_POST['phone']);
+$city        = mysqli_real_escape_string($conn, $_POST['city']);
 $description = mysqli_real_escape_string($conn, $_POST['description']);
 
 /* OWNER CHECK */
-$check = mysqli_query($conn, "SELECT * FROM businesses WHERE id='$id' AND user_id='$user_id'");
+$check = mysqli_query($conn, "SELECT id FROM businesses WHERE id='$id' AND user_id='$user_id'");
 
 if(mysqli_num_rows($check) == 0){
     die("Not allowed");
@@ -24,13 +24,23 @@ if(mysqli_num_rows($check) == 0){
 
 /* IMAGE UPLOAD */
 $image_sql = "";
+
 if(!empty($_FILES['image']['name'])){
-    $img = time()."_".$_FILES['image']['name'];
-    move_uploaded_file($_FILES['image']['tmp_name'], "uploads/".$img);
-    $image_sql = ", image='$img'";
+
+    $folder = "uploads/";
+
+    if(!is_dir($folder)){
+        mkdir($folder, 0777, true);
+    }
+
+    $img = time() . "_" . basename($_FILES['image']['name']);
+
+    if(move_uploaded_file($_FILES['image']['tmp_name'], $folder.$img)){
+        $image_sql = ", image='$img'";
+    }
 }
 
-/* UPDATE QUERY (Ab ismein error nahi aayega) */
+/* FINAL UPDATE QUERY (FIXED COMMA ISSUE) */
 $sql = "UPDATE businesses SET 
 name='$name',
 phone='$phone',
@@ -41,8 +51,8 @@ WHERE id='$id' AND user_id='$user_id'";
 
 if(mysqli_query($conn, $sql)){
     header("Location: my_business.php?updated=1");
+    exit();
 } else {
-    echo "Error updating record: " . mysqli_error($conn);
+    die("Error updating record: " . mysqli_error($conn));
 }
-exit();
 ?>
