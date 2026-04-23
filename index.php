@@ -349,5 +349,12 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 </script>
-
+<?php if(isset($_SESSION['open_business_modal'])): ?>
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+    document.getElementById("businessModal").style.display = "flex";
+});
+</script>
+<?php unset($_SESSION['open_business_modal']); ?>
+<?php endif; ?>
 <?php include('includes/footer.php'); ?>
