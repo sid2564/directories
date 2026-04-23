@@ -213,30 +213,19 @@ body{
     <?php while($row = mysqli_fetch_assoc($result)){ ?>
 
     <div class="card">
+    <?php
+    $img = $row['image'];
+    $finalImg = "uploads/default.png"; // Default fallback
 
-       <?php
-$img = $row['image'];
-
-// 1. Check if the image name exists in database
-if (!empty($img)) {
-    // 2. Define the path relative to this file for the <img> tag
-    $imgPath = "uploads/" . $img; 
-    
-    // 3. Define the absolute path for the server to check if file exists
-    $serverPath = __DIR__ . DIRECTORY_SEPARATOR . "uploads" . DIRECTORY_SEPARATOR . $img;
-
-    // 4. Verify if file actually exists on disk
-    if (file_exists($serverPath)) {
-        $finalImg = $imgPath;
-    } else {
-        // Fallback if database has a name but file is missing from folder
-        $finalImg = "uploads/default.png"; 
+    if (!empty($img)) {
+        $imgPath = "uploads/" . $img;
+        
+        // Use a simpler check: if the file exists in the uploads folder
+        if (file_exists("uploads/" . $img)) {
+            $finalImg = $imgPath;
+        }
     }
-} else {
-    // Fallback if database field is empty
-    $finalImg = "uploads/default.png";
-}
-?>
+    ?>
 
 <img src="<?php echo $finalImg; ?>" alt="Business Logo">
 
