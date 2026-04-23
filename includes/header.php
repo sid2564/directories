@@ -3,7 +3,7 @@
 // index.php (and all other pages) call session_start() BEFORE including this file.
 // Using session_status() check makes it safe even if included standalone.
 if(session_status() === PHP_SESSION_NONE){
-    session_start();
+    
 }
 // DB CHECK
 $has_business = false;
