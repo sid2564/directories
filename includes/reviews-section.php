@@ -11,14 +11,14 @@ echo "DB CONNECTED"; // TEMP ONLY
 /* FIRST SET */
 $reviews = mysqli_query($conn, "
     SELECT * FROM reviews 
-    ORDER BY created_at DESC 
+    ORDER BY id DESC
     LIMIT 10
 ");
 
 /* SECOND SET */
 $reviews2 = mysqli_query($conn, "
-    SELECT * FROM reviews 
-    ORDER BY created_at DESC 
+    SELECT * FROM reviews
+    ORDER BY id DESC
     LIMIT 10
 ");
 ?>
