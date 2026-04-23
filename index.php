@@ -28,6 +28,7 @@ if(isset($_POST['login'])){
         }
     }
 }
+
 // --- HANDLE SIGNUP ---
 if(isset($_POST['signup'])){
 
@@ -334,6 +335,15 @@ alert("Business successfully added!");
     });
   });
 </script>
+<script>
+function openLogin(){
+    document.getElementById("loginModal").style.display = "flex";
+}
+
+function closeLogin(){
+    document.getElementById("loginModal").style.display = "none";
+}
+</script>
 
 <!-- FAQ accordion -->
 <script>
@@ -350,6 +360,14 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 <?php if(isset($_SESSION['open_business_modal'])): ?>
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+    document.getElementById("businessModal").style.display = "flex";
+});
+</script>
+<?php unset($_SESSION['open_business_modal']); ?>
+<?php endif; ?>
+<?php if(isset($_SESSION['login_verified']) && isset($_SESSION['open_business_modal'])): ?>
 <script>
 document.addEventListener("DOMContentLoaded", function(){
     document.getElementById("businessModal").style.display = "flex";
