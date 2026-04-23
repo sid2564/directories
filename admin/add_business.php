@@ -1,9 +1,6 @@
 <?php
 session_start();
-include __DIR__ . "/../db.php";
-if(!isset($conn)){
-    die("Database connection failed");
-}
+include "../directories/db.php";
 /* =========================
    LOGIN CHECK (SAFE REDIRECT)
 ========================= */
@@ -19,7 +16,7 @@ $user_id = $_SESSION['user_id'];
 ========================= */
 if(isset($_POST['name'])){
 
-    $name = mysqli_real_escape_string($conn ?? die("DB error"), $_POST['name']);
+    $name            = mysqli_real_escape_string($conn, $_POST['name']);
     $owner           = mysqli_real_escape_string($conn, $_POST['owner_name']);
     $category        = mysqli_real_escape_string($conn, $_POST['category']);
     $subcategory_id  = mysqli_real_escape_string($conn, $_POST['subcategory_id']);
@@ -50,10 +47,10 @@ if(isset($_POST['name'])){
 /* =========================
    INSERT BUSINESS
 ========================= */
-    $sql = "INSERT INTO businesses 
-    (name, owner_name, category, subcategory_id, phone, email, website, address, city, description, image, user_id, status)
-    VALUES 
-    ('$name', '$owner', '$category', '$subcategory_id', '$phone', '$email', '$website', '$address', '$city', '$description', '$image', '$user_id', 'pending')";
+   $sql = "INSERT INTO businesses 
+(name, owner_name, category, subcategory_id, phone, email, website, address, city, description, image, user_id, status)
+VALUES 
+('$name', '$owner', '$category', '$subcategory_id', '$phone', '$email', '$website', '$address', '$city', '$description', '$image', '$user_id', 'approved')";
 
     if(mysqli_query($conn, $sql)){
 
