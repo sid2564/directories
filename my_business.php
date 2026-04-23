@@ -214,14 +214,20 @@ body{
 
     <div class="card">
 
-        <img src="<?php
-            $img = $row['image'];
-            if(!empty($img) && file_exists('uploads/'.$img)){
-                echo 'uploads/'.$img;
-            } else {
-                echo 'uploads/default.png';
-            }
-        ?>">
+       <?php
+$img = $row['image'];
+
+$imgPath = "uploads/" . $img;
+$serverPath = __DIR__ . "/uploads/" . $img;
+
+if(!empty($img) && file_exists($serverPath)){
+    $finalImg = $imgPath;
+} else {
+    $finalImg = "uploads/default.png";
+}
+?>
+
+<img src="<?php echo $finalImg; ?>">
 
         <div class="info">
             <h3><?php echo $row['name']; ?></h3>
