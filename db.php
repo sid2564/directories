@@ -4,7 +4,7 @@ $conn = mysqli_connect(
     "MYSQLUSER_YAHAN",
     "MYSQLPASSWORD_YAHAN",
     "MYSQLDATABASE_YAHAN",
-    MYSQLPORT_YAHAN
+    3306
 );
 
 if(!$conn){
