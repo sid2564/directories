@@ -7,22 +7,25 @@ include "db.php";
 
 // --- HANDLE LOGIN ---
 if(isset($_POST['login'])){
+
     $email    = $_POST['login_email'];
     $password = $_POST['login_password'];
-   $query = "SELECT * FROM users WHERE email='$email'";
-$result = mysqli_query($conn, $query);
 
-if(mysqli_num_rows($result) > 0){
-    $user = mysqli_fetch_assoc($result);
+    $query = "SELECT * FROM users WHERE email='$email'";
+    $result = mysqli_query($conn, $query);
 
-    if($user['password'] == $password){
+    if(mysqli_num_rows($result) > 0){
+        $user = mysqli_fetch_assoc($result);
 
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['user_name'] = $user['fullname'];
-        $_SESSION['user_email'] = $user['email'];
+        if($user['password'] == $password){
 
-        header("Location: index.php");
-        exit;
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_name'] = $user['fullname'];
+            $_SESSION['user_email'] = $user['email'];
+
+            header("Location: index.php");
+            exit;
+        }
     }
 }
 // --- HANDLE SIGNUP ---
