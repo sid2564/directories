@@ -306,59 +306,25 @@ alert("Business successfully added!");
 </section>
 
 <!-- LOGIN POPUP SCRIPT -->
+========================= -->
 <script>
-  // PHP session value passed to JS
-  var userIsLoggedIn = <?php echo $isLoggedIn; ?>;
+var userIsLoggedIn = <?php echo $isLoggedIn; ?>;
 
-  document.addEventListener("DOMContentLoaded", function () {
-    var modal    = document.getElementById("loginModal");
-    var closeBtn = document.querySelector("#loginModal .close");
+document.addEventListener("DOMContentLoaded", function(){
 
-    function openLoginModal()  { if (modal) modal.style.display = "flex"; }
-    function closeLoginModal() { if (modal) modal.style.display = "none"; }
+    var modal = document.getElementById("loginModal");
 
-    if (closeBtn) closeBtn.onclick = closeLoginModal;
-
-    // Show popup after 10 seconds ONLY for guests (not logged in)
-    if (!userIsLoggedIn) {
-      setTimeout(openLoginModal, 10000);
+    function openLogin(){
+        if(modal) modal.style.display = "flex";
     }
 
-    // Category links: allow if logged in, block + show popup if not
-    document.querySelectorAll(".category-link").forEach(function (link) {
-      link.addEventListener("click", function (e) {
-        if (!userIsLoggedIn) {
-          e.preventDefault();
-          openLoginModal();
-        }
-      });
-    });
-  });
-</script>
-<script>
-function openLogin(){
-    document.getElementById("loginModal").style.display = "flex";
-}
+    if(!userIsLoggedIn){
+        setTimeout(openLogin, 10000);
+    }
 
-function closeLogin(){
-    document.getElementById("loginModal").style.display = "none";
-}
-</script>
-
-<!-- FAQ accordion -->
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  document.querySelectorAll(".faq-item").forEach(function (item) {
-    item.addEventListener("click", function () {
-      var answer = item.querySelector(".faq-answer");
-      document.querySelectorAll(".faq-answer").forEach(function (a) {
-        if (a !== answer) a.style.display = "none";
-      });
-      answer.style.display = answer.style.display === "block" ? "none" : "block";
-    });
-  });
 });
 </script>
+
 <?php if(isset($_SESSION['open_business_modal'])): ?>
 <script>
 document.addEventListener("DOMContentLoaded", function(){
@@ -370,4 +336,6 @@ document.addEventListener("DOMContentLoaded", function(){
 </script>
 <?php unset($_SESSION['open_business_modal']); ?>
 <?php endif; ?>
+
+<?php include('includes/footer.php'); ?>
 <?php include('includes/footer.php'); ?>
