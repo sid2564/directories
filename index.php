@@ -9,28 +9,25 @@ include "db.php";
 if(isset($_POST['login'])){
     $email    = $_POST['login_email'];
     $password = $_POST['login_password'];
-    $query    = "SELECT * FROM users WHERE email='$email' AND password='$password'";
-    $result   = mysqli_query($conn, $query);
+   $query = "SELECT * FROM users WHERE email='$email'";
+$result = mysqli_query($conn, $query);
 
-    if(mysqli_num_rows($result) > 0){
-        $user = mysqli_fetch_assoc($result);
-        $_SESSION['user_id']    = $user['id'];
-        $_SESSION['user_name']  = $user['fullname'];
+if(mysqli_num_rows($result) > 0){
+    $user = mysqli_fetch_assoc($result);
+
+    if($user['password'] == $password){
+
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['user_name'] = $user['fullname'];
         $_SESSION['user_email'] = $user['email'];
-        
-         // 🔥 Add Business ke liye verify flow
-        if(isset($_POST['verify_business'])){
-            $_SESSION['open_business_modal'] = true;
-        }
-        header("Location: index.php"); // safe - no HTML output yet
-        exit();
-    } else {
-        $loginError = "Invalid Email or Password";
+
+        header("Location: index.php");
+        exit;
     }
 }
-
 // --- HANDLE SIGNUP ---
 if(isset($_POST['signup'])){
+
     $fullname = $_POST['fullname'];
     $email    = $_POST['email'];
     $phone    = $_POST['phone'];
@@ -40,28 +37,24 @@ if(isset($_POST['signup'])){
     if($password != $confirm){
         $signupError = "Passwords do not match";
     } else {
-        $q = "INSERT INTO users (fullname, email, phone, password) VALUES ('$fullname','$email','$phone','$password')";
+
+        $q = "INSERT INTO users (fullname, email, phone, password)
+              VALUES ('$fullname','$email','$phone','$password')";
+
         if(mysqli_query($conn, $q)){
-          if(mysqli_query($conn, $q)){
 
-    // 🔥 auto login session set
-    $_SESSION['user_id'] = mysqli_insert_id($conn);
-    $_SESSION['user_name'] = $fullname;
-    $_SESSION['user_email'] = $email;
+            $_SESSION['user_id'] = mysqli_insert_id($conn);
+            $_SESSION['user_name'] = $fullname;
+            $_SESSION['user_email'] = $email;
 
-    // 🔥 redirect to homepage
-    header("Location: index.php");
-    exit;
+            header("Location: index.php");
+            exit;
 
-} else {
-    $signupError = "Error: " . mysqli_error($conn);
-}
         } else {
-            $signupError = "Error: " . mysqli_error($conn);
+            $signupError = mysqli_error($conn);
         }
     }
 }
-
 // --- HANDLE ADD BUSINESS ---
 if(isset($_POST['add_business'])){
     $name      = $_POST['name'] ?? '';
