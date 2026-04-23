@@ -6,20 +6,20 @@ if(!$conn){
     die("DB NOT CONNECTED");
 }
 
-
-/* FIRST SET */
-$reviews = mysqli_query($conn, "
+/* FETCH ONCE */
+$result = mysqli_query($conn, "
     SELECT * FROM reviews 
     ORDER BY id DESC
     LIMIT 10
 ");
 
-/* SECOND SET */
-$reviews2 = mysqli_query($conn, "
-    SELECT * FROM reviews
-    ORDER BY id DESC
-    LIMIT 10
-");
+$reviews = [];
+
+if($result && mysqli_num_rows($result) > 0){
+    while($row = mysqli_fetch_assoc($result)){
+        $reviews[] = $row;
+    }
+}
 ?>
 
 <section class="reviews">
@@ -75,17 +75,11 @@ $reviews2 = mysqli_query($conn, "
   margin-bottom: 5px;
 }
 
-/* MAIN SMOOTH LOOP */
 @keyframes scrollReviews {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
-/* pause on hover */
 .reviews-wrapper:hover .reviews-slider{
   animation-play-state: paused;
 }
@@ -94,33 +88,8 @@ $reviews2 = mysqli_query($conn, "
 <div class="reviews-wrapper">
   <div class="reviews-slider">
 
-    <!-- FIRST LOOP -->
-    <?php if(mysqli_num_rows($reviews) > 0): ?>
-      <?php while($r = mysqli_fetch_assoc($reviews)): ?>
-        <div class="review-card">
-
-          <p class="review-text">
-            "<?php echo $r['comment'] ?? 'No review'; ?>"
-          </p>
-
-          <div class="reviewer">
-            <strong><?php echo $r['name'] ?? 'Anonymous'; ?></strong>
-
-            <span>
-              <?php 
-              for($i=1; $i<=5; $i++){
-                  echo $i <= $r['rating'] ? "⭐" : "☆";
-              }
-              ?>
-            </span>
-          </div>
-
-        </div>
-      <?php endwhile; ?>
-    <?php endif; ?>
-
-    <!-- SECOND LOOP (DUPLICATE FOR SMOOTH INFINITE) -->
-    <?php while($r = mysqli_fetch_assoc($reviews2)): ?>
+    <!-- LOOP 1 -->
+    <?php foreach($reviews as $r): ?>
       <div class="review-card">
 
         <p class="review-text">
@@ -140,7 +109,30 @@ $reviews2 = mysqli_query($conn, "
         </div>
 
       </div>
-    <?php endwhile; ?>
+    <?php endforeach; ?>
+
+    <!-- LOOP 2 (DUPLICATE FOR SMOOTH SCROLL) -->
+    <?php foreach($reviews as $r): ?>
+      <div class="review-card">
+
+        <p class="review-text">
+          "<?php echo $r['comment'] ?? 'No review'; ?>"
+        </p>
+
+        <div class="reviewer">
+          <strong><?php echo $r['name'] ?? 'Anonymous'; ?></strong>
+
+          <span>
+            <?php 
+            for($i=1; $i<=5; $i++){
+                echo $i <= $r['rating'] ? "⭐" : "☆";
+            }
+            ?>
+          </span>
+        </div>
+
+      </div>
+    <?php endforeach; ?>
 
   </div>
 </div>
