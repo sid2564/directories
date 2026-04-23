@@ -7,31 +7,25 @@ include "db.php";
 
 // --- HANDLE LOGIN ---
 if(isset($_POST['login'])){
-
     $email    = $_POST['login_email'];
     $password = $_POST['login_password'];
-
-    $query = "SELECT * FROM users WHERE email='$email'";
-    $result = mysqli_query($conn, $query);
+    $query    = "SELECT * FROM users WHERE email='$email' AND password='$password'";
+    $result   = mysqli_query($conn, $query);
 
     if(mysqli_num_rows($result) > 0){
         $user = mysqli_fetch_assoc($result);
-
-        if($user['password'] == $password){
-
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['user_name'] = $user['fullname'];
-            $_SESSION['user_email'] = $user['email'];
-
-            header("Location: index.php");
-            exit;
-        }
+        $_SESSION['user_id']    = $user['id'];
+        $_SESSION['user_name']  = $user['fullname'];
+        $_SESSION['user_email'] = $user['email'];
+        header("Location: index.php"); // safe - no HTML output yet
+        exit();
+    } else {
+        $loginError = "Invalid Email or Password";
     }
 }
 
 // --- HANDLE SIGNUP ---
 if(isset($_POST['signup'])){
-
     $fullname = $_POST['fullname'];
     $email    = $_POST['email'];
     $phone    = $_POST['phone'];
@@ -41,24 +35,15 @@ if(isset($_POST['signup'])){
     if($password != $confirm){
         $signupError = "Passwords do not match";
     } else {
-
-        $q = "INSERT INTO users (fullname, email, phone, password)
-              VALUES ('$fullname','$email','$phone','$password')";
-
+        $q = "INSERT INTO users (fullname, email, phone, password) VALUES ('$fullname','$email','$phone','$password')";
         if(mysqli_query($conn, $q)){
-
-            $_SESSION['user_id'] = mysqli_insert_id($conn);
-            $_SESSION['user_name'] = $fullname;
-            $_SESSION['user_email'] = $email;
-
-            header("Location: index.php");
-            exit;
-
+            $signupSuccess = "Signup Successful! Please login.";
         } else {
-            $signupError = mysqli_error($conn);
+            $signupError = "Error: " . mysqli_error($conn);
         }
     }
 }
+
 // --- HANDLE ADD BUSINESS ---
 if(isset($_POST['add_business'])){
     $name      = $_POST['name'] ?? '';
@@ -91,17 +76,13 @@ $isLoggedIn = isset($_SESSION['user_id']) ? 'true' : 'false';
 <?php if(!empty($signupSuccess)): ?>
   <script>alert('<?php echo addslashes($signupSuccess); ?>');</script>
 <?php endif; ?>
-<?php if(isset($_GET['added'])): ?>
-<script>
-alert("Business successfully added!");
-</script>
-<?php endif; ?>
+
 <!-- HERO -->
 <section class="hero">
   <div class="hero-overlay">
     <h1>Discover &amp; Connect: Your Ultimate Directory Hub</h1>
-   <form class="search-box" method="GET" action="search.php">
-      <input type="text" name="q" placeholder="what are you looking for?">
+    <div class="search-box">
+      <input type="text" placeholder="what are you looking for?">
       <select required>
         <option value="">Select category</option>
         <option>food&amp;grocerey</option>
@@ -115,111 +96,68 @@ alert("Business successfully added!");
         <option>customer care services</option>
         <option>caterers</option>
       </select>
-      <input type="text" name="city" placeholder="location">
-      <button type="submit" class="btn-search">search</button>
-    </form>
+      <input type="text" placeholder="location">
+      <button class="btn-search">search</button>
+    </div>
   </div>
 </section>
 
 <div class="categories">
   <h2>browse by category</h2><br><br>
   <p>Explore businesses across various industries and find exactly what you need</p>
-
   <div class="dicv">
-
-    <a href="food&grocerey.php" class="category-box">
-      <section class="category">
-        <img src="imagess/car1.jpg" alt="card">
-        <div class="con2"><h4>food & grocery</h4></div>
-      </section>
-    </a>
-
-    <a href="hotel&restaurant.php" class="category-box">
-      <section class="category">
-        <img src="imagess/car2.jpg" alt="card">
-        <div class="con2"><h4>hotel & restaurant</h4></div>
-      </section>
-    </a>
-
-    <a href="toys&gifts.php" class="category-box">
-      <section class="category">
-        <img src="imagess/car3.jpg" alt="card">
-        <div class="con2"><h4>toys & gifts</h4></div>
-      </section>
-    </a>
-
+    <section class="category">
+      <img src="imagess/car1.jpg" alt="card">
+      <div class="con2"><h4><a href="food&amp;grocerey.php" class="category-link">food &amp; grocery</a></h4></div>
+    </section>
+    <section class="category">
+      <img src="imagess/car2.jpg" alt="card" height="170" width="300">
+      <div class="con2"><h4><a href="hotel&amp;restaurant.php" class="category-link">hotel &amp; restaurant</a></h4></div>
+    </section>
+    <section class="category">
+      <img src="imagess/car3.jpg" alt="card" height="170" width="300">
+      <div class="con2"><h4><a href="toys&amp;gifts.php" class="category-link">toys &amp; gifts</a></h4></div>
+    </section>
   </div>
-
   <div>
-
     <div class="dicv1">
-
-      <a href="hospital.php" class="category-box">
-        <section class="category">
-          <img src="imagess/car4.jpg" alt="card">
-          <div class="con2"><h4>hospital</h4></div>
-        </section>
-      </a>
-
-      <a href="medical.php" class="category-box">
-        <section class="category">
-          <img src="imagess/car5.jpg" alt="card">
-          <div class="con2"><h4>medical</h4></div>
-        </section>
-      </a>
-
-      <a href="education.php" class="category-box">
-        <section class="category">
-          <img src="imagess/car6.jpg" alt="card">
-          <div class="con2"><h4>education</h4></div>
-        </section>
-      </a>
-
+      <section class="category">
+        <img src="imagess/car4.jpg" alt="card" height="170" width="300">
+        <div class="con2"><h4><a href="hospital.php" class="category-link">hospital</a></h4></div>
+      </section>
+      <section class="category">
+        <img src="imagess/car5.jpg" alt="card" height="170" width="300">
+        <div class="con2"><h4><a href="medical.php" class="category-link">medical</a></h4></div>
+      </section>
+      <section class="category">
+        <img src="imagess/car6.jpg" alt="card" height="170" width="300">
+        <div class="con2"><h4><a href="education.php" class="category-link">education</a></h4></div>
+      </section>
     </div>
-
     <div class="dicv2">
-
-      <a href="pestcontrol.php" class="category-box">
-        <section class="category">
-          <img src="imagess/car7.jpg" alt="card">
-          <div class="con2"><h4>pest control</h4></div>
-        </section>
-      </a>
-
-      <a href="banquet.php" class="category-box">
-        <section class="category">
-          <img src="imagess/car8.jpg" alt="card">
-          <div class="con2"><h4>banquet</h4></div>
-        </section>
-      </a>
-
-      <a href="atm.php" class="category-box">
-        <section class="category">
-          <img src="imagess/car9.jpg" alt="card">
-          <div class="con2"><h4>atm</h4></div>
-        </section>
-      </a>
-
+      <section class="category">
+        <img src="imagess/car7.jpg" alt="card" height="170" width="300">
+        <div class="con2"><h4><a href="pestcontrol.php" class="category-link">pest control</a></h4></div>
+      </section>
+      <section class="category">
+        <img src="imagess/car8.jpg" alt="card" height="170" width="300">
+        <div class="con2"><h4><a href="banquet.php" class="category-link">banquet</a></h4></div>
+      </section>
+      <section class="category">
+        <img src="imagess/car9.jpg" alt="card" height="170" width="300">
+        <div class="con2"><h4><a href="atm.php" class="category-link">atm</a></h4></div>
+      </section>
     </div>
-
     <div class="dicv3">
-
-      <a href="customer.php" class="category-box">
-        <section class="category">
-          <img src="imagess/car10.jpg" alt="card">
-          <div class="con2"><h4>customer care services</h4></div>
-        </section>
-      </a>
-
-      <a href="cateres.php" class="category-box">
-        <section class="category">
-          <img src="imagess/car11.jpg" alt="card">
-          <div class="con2"><h4>cateres</h4></div>
-        </section>
-      </a>
-
+      <section class="category">
+        <img src="imagess/car10.jpg" alt="card" height="170" width="300">
+        <div class="con2"><h4><a href="customer.php" class="category-link">customer care services</a></h4></div>
+      </section>
+      <section class="category">
+        <img src="imagess/car11.jpg" alt="card" height="170" width="300">
+        <div class="con2"><h4><a href="cateres.php" class="category-link">cateres</a></h4></div>
+      </section>
     </div>
-
   </div>
 </div>
 
@@ -249,7 +187,23 @@ alert("Business successfully added!");
   </div>
 </section>
 
-<?php include('includes/reviews-section.php'); ?>
+<section class="reviews">
+  <h2>What People Say</h2>
+  <div class="reviews-grid">
+    <div class="review-card">
+      <p class="review-text">"Very helpful platform. I found a reliable service provider within minutes."</p>
+      <div class="reviewer"><strong>Rahul Patel</strong><span>&#11088;&#11088;&#11088;&#11088;&#11088;</span></div>
+    </div>
+    <div class="review-card">
+      <p class="review-text">"Easy to use and businesses listed are genuine. Highly recommended!"</p>
+      <div class="reviewer"><strong>Anjali Sharma</strong><span>&#11088;&#11088;&#11088;&#11088;</span></div>
+    </div>
+    <div class="review-card">
+      <p class="review-text">"Best local business directory for Vapi. Clean design and fast search."</p>
+      <div class="reviewer"><strong>Mohit Desai</strong><span>&#11088;&#11088;&#11088;&#11088;&#11088;</span></div>
+    </div>
+  </div>
+</section>
 
 <section class="how-it-works">
   <h2>How It Works</h2>
@@ -306,36 +260,49 @@ alert("Business successfully added!");
 </section>
 
 <!-- LOGIN POPUP SCRIPT -->
-========================= -->
 <script>
-var userIsLoggedIn = <?php echo $isLoggedIn; ?>;
+  // PHP session value passed to JS
+  var userIsLoggedIn = <?php echo $isLoggedIn; ?>;
 
-document.addEventListener("DOMContentLoaded", function(){
+  document.addEventListener("DOMContentLoaded", function () {
+    var modal    = document.getElementById("loginModal");
+    var closeBtn = document.querySelector("#loginModal .close");
 
-    var modal = document.getElementById("loginModal");
+    function openLoginModal()  { if (modal) modal.style.display = "flex"; }
+    function closeLoginModal() { if (modal) modal.style.display = "none"; }
 
-    function openLogin(){
-        if(modal) modal.style.display = "flex";
+    if (closeBtn) closeBtn.onclick = closeLoginModal;
+
+    // Show popup after 10 seconds ONLY for guests (not logged in)
+    if (!userIsLoggedIn) {
+      setTimeout(openLoginModal, 10000);
     }
 
-    if(!userIsLoggedIn){
-        setTimeout(openLogin, 10000);
-    }
+    // Category links: allow if logged in, block + show popup if not
+    document.querySelectorAll(".category-link").forEach(function (link) {
+      link.addEventListener("click", function (e) {
+        if (!userIsLoggedIn) {
+          e.preventDefault();
+          openLoginModal();
+        }
+      });
+    });
+  });
+</script>
 
+<!-- FAQ accordion -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(".faq-item").forEach(function (item) {
+    item.addEventListener("click", function () {
+      var answer = item.querySelector(".faq-answer");
+      document.querySelectorAll(".faq-answer").forEach(function (a) {
+        if (a !== answer) a.style.display = "none";
+      });
+      answer.style.display = answer.style.display === "block" ? "none" : "block";
+    });
+  });
 });
 </script>
 
-<?php if(isset($_SESSION['open_business_modal'])): ?>
-<script>
-document.addEventListener("DOMContentLoaded", function(){
-    var modal = document.getElementById("businessModal");
-    if(modal){
-        modal.style.display = "flex";
-    }
-});
-</script>
-<?php unset($_SESSION['open_business_modal']); ?>
-<?php endif; ?>
-
-<?php include('includes/footer.php'); ?>
 <?php include('includes/footer.php'); ?>
