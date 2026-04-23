@@ -1,6 +1,13 @@
 <?php
 include "db.php";
 
+/* DEBUG CHECK */
+if(!$conn){
+    die("DB NOT CONNECTED");
+}
+
+echo "DB CONNECTED"; // TEMP ONLY
+
 /* FIRST SET */
 $reviews = mysqli_query($conn, "
     SELECT * FROM reviews 
@@ -8,7 +15,7 @@ $reviews = mysqli_query($conn, "
     LIMIT 10
 ");
 
-/* SECOND SET (FOR SMOOTH LOOP) */
+/* SECOND SET */
 $reviews2 = mysqli_query($conn, "
     SELECT * FROM reviews 
     ORDER BY created_at DESC 
@@ -138,11 +145,5 @@ $reviews2 = mysqli_query($conn, "
 
   </div>
 </div>
-<?php
-if(!$conn){
-    die("DB NOT CONNECTED");
-} else {
-    echo "CONNECTED SUCCESSFULLY";
-}
-?>
+
 </section>
