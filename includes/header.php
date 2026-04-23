@@ -25,7 +25,7 @@ if(isset($_SESSION['user_id']) && isset($conn)){
   <title>Business Directory</title>
   <link rel="stylesheet" href="style1.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
-    <!-- Google tag (gtag.js) -->
+  <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZPB6M0HBV8"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -346,8 +346,7 @@ document.querySelectorAll(".open-business").forEach(function(btn){
     <?php if(!isset($_SESSION['user_id'])): ?>
         // ❌ login nahi hai
         document.getElementById("loginModal").style.display = "flex";
-
-    <?php elseif(isset($_SESSION['user_id']) && !isset($_SESSION['verified'])): ?>
+        style.display = "block";
         // ❌ login hai but verify nahi
         document.getElementById("loginModal").style.display = "flex";
 
@@ -368,10 +367,28 @@ document.querySelectorAll(".open-business").forEach(function(btn){
 //     document.body.classList.add("modal-open");
 //   });
 // });
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+
+    document.querySelectorAll(".open-business").forEach(btn=>{
+        btn.addEventListener("click", function(e){
+            e.preventDefault();
+
+            <?php if(!isset($_SESSION['user_id'])): ?>
+                document.getElementById("loginModal").style.display = "flex";
+            <?php else: ?>
+                document.getElementById("businessModal").style.display = "flex";
+            <?php endif; ?>
+
+        });
+    });
+
+});
+</script>
 <?php if(isset($_SESSION['open_business_modal'])): ?>
 
 document.addEventListener("DOMContentLoaded", function(){
-    document.getElementById("businessModal").style.display = "block";
+    document.getElementById("businessModal").style.display = "flex";
     document.body.classList.add("modal-open");
 });
 
@@ -383,7 +400,7 @@ document.addEventListener("DOMContentLoaded", function(){
   document.querySelectorAll(".open-signup").forEach(function(btn){
     btn.addEventListener("click", function(e){
       e.preventDefault();
-      document.getElementById("signupModal").style.display = "block";
+      document.getElementById("signupModal").style.display = "flex";
       document.body.classList.add("modal-open");
     });
   });
